@@ -9,9 +9,18 @@ public class Terminal {
 	private Scanner scanner;
 
 	public void run() {
-		// TODO: Write all game logic in here.
-		// If you do it correctly, you don't need to add new
-		// functions into other classes.
+		game = new Game();
+		scanner = new Scanner(System.in);
+		while(!game.isEnd()){
+			System.out.println(game.getCurrentPlayerName() + "'s turn");
+			
+			System.out.println("Row: ");
+			int row = scanner.nextInt();
+			System.out.println("Col: ");
+			int col = scanner.nextInt();
+			
+			game.currentPlayerTakesAction(row, col);
+		}
 	}
 
 	private void renderBoard(Game game) {
