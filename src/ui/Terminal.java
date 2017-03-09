@@ -10,8 +10,10 @@ public class Terminal {
 
 	public void run() {
 		game = new Game();
+		game.start();
 		scanner = new Scanner(System.in);
 		while(!game.isEnd()){
+			renderBoard(game);
 			System.out.println(game.getCurrentPlayerName() + "'s turn");
 			
 			System.out.println("Row: ");
@@ -21,6 +23,8 @@ public class Terminal {
 			
 			game.currentPlayerTakesAction(row, col);
 		}
+		
+		System.out.println("Congrats!! "+game.getWinnerName() + " win");
 	}
 
 	private void renderBoard(Game game) {
