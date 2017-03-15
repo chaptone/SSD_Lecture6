@@ -58,11 +58,19 @@ public class MultiPlayerGui extends JFrame implements Observer {
 	}
 
 	public void startServer() {
-		// TODO: Complete the logic here
+		gameServer.start();
+		isServer = true;
+		
+		startServerButton.setEnabled(false);
+		startClientButton.setEnabled(false);
 	}
 
 	public void startClient() {
-		// TODO: Complete the logic here
+		gameClient.connect();
+		isClient = true;
+		
+		startServerButton.setEnabled(false);
+		startClientButton.setEnabled(false);
 	}
 
 	private void initComponents() {
@@ -144,7 +152,14 @@ public class MultiPlayerGui extends JFrame implements Observer {
 
 	@Override
 	public void update(Observable o, Object arg) {
-		// TODO: Complete the logic here
+		if(!(arg instanceof Game)){
+			   game.start();
+			  }
+			  else{
+			   game = (Game)arg;
+			  }
+			  refreshGui();
+		
 	}
 
 	public void refreshGui() {
@@ -163,9 +178,24 @@ public class MultiPlayerGui extends JFrame implements Observer {
 
 		@Override
 		public void mousePressed(MouseEvent e) {
+			if (!((isServer && game.isP1Turn()) || (isClient && game.isP2Turn()))) {
+				return;
+			}
+			if (game.isEnd()) {
+				return;
+			}
 			int row = e.getY() / squareSize();
 			int col = e.getX() / squareSize();
-			// TODO: Complete the logic here
+			int[] pos = new int[]{row, col};
+			try {
+				game.currentPlayerTakesAction(pos[0], pos[1]);
+			} catch (NullPointerException ne) {
+				System.out.println("game not start");
+			}
+			
+			refreshGui();
+			gameServer.send(game);
+			gameClient.send(game);
 		}
 	}
 	
